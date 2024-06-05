@@ -1,5 +1,5 @@
 Care Connect (Pasien)
-https://github.com/mikhlasnr/care-connect-pasien
+https://github.com/mikhlasnr/care-connect
 
 Care Connect (Dokter)
 https://github.com/mikhlasnr/care-connect-dokter
