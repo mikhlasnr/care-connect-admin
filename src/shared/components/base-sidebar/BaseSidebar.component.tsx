@@ -16,8 +16,8 @@ const items: MenuItem[] = [
     key: '/poli-klinik',
   },
   {
-    label: 'List Dokter',
-    key: '/list-dokter',
+    label: 'Dokter',
+    key: '/doctor',
   }
 ];
 
