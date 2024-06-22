@@ -1,41 +1,53 @@
 'use client'
 
-import React from 'react'
-import { Button, Popconfirm, Space, Table, Tag, Tooltip, message } from 'antd'
+import {
+  removeDoctorList,
+  setSelectedDoctor,
+  toggleShowDoctorForm,
+} from '@/store/docter/docter.reducer'
+import { DoctorItem } from '@/store/docter/docter.types'
+import { useAppDispatch, useAppSelector } from '@/store/store'
+import { DeleteOutlined, EditOutlined } from '@ant-design/icons'
 import type { PopconfirmProps, TableProps } from 'antd'
-import { DoctorProps } from './ListDoctorTable.type'
-import { doctorsListData } from './ListDoctorTable.utils'
-import { EditOutlined, DeleteOutlined } from '@ant-design/icons'
-import Link from 'next/link'
+import { Button, Popconfirm, Space, Table, Tooltip, message } from 'antd'
 
 export const ListDoctorTable = () => {
-  const confirm: PopconfirmProps['onConfirm'] = (e) => {
-    console.log(e)
+  const dispatch = useAppDispatch()
+  const doctorList = useAppSelector((state) => state.docter.doctorList)
+
+  // START HANDLE DELETE
+  const handleDelete = (doctorId: string) => {
+    dispatch(removeDoctorList({ doctorId }))
     message.success('Data Berhasil Dihapus')
   }
 
   const cancel: PopconfirmProps['onCancel'] = (e) => {
     console.log(e)
   }
+  // END HANDLE DELETE
 
-  const columns: TableProps<DoctorProps>['columns'] = [
+  // START HANDLE UPDATE
+  const handleUpdate = (doctorItem: DoctorItem) => {
+    dispatch(setSelectedDoctor(doctorItem))
+    dispatch(toggleShowDoctorForm())
+  }
+  // END HANDLE UPDATE
+
+  const columns: TableProps<DoctorItem>['columns'] = [
     {
-      title: 'Name',
+      title: 'Nama',
       dataIndex: 'name',
       key: 'name',
-      render: (value, record) => (
-        <Link href={`doctor/${record.id}`}>{value}</Link>
-      ),
     },
     {
-      title: 'Age',
+      title: 'Umur',
       dataIndex: 'age',
       key: 'age',
     },
     {
       title: 'Poli',
-      dataIndex: 'categoryPoli',
-      key: 'categoryPoli',
+      dataIndex: 'poliName',
+      key: 'poliName',
     },
     {
       width: 80,
@@ -44,13 +56,16 @@ export const ListDoctorTable = () => {
       render: (_, record) => (
         <Space size="middle">
           <Tooltip title="Ubah">
-            <Button icon={<EditOutlined />} />
+            <Button
+              icon={<EditOutlined />}
+              onClick={() => handleUpdate(record)}
+            />
           </Tooltip>
           <Tooltip title="Hapus">
             <Popconfirm
               title="Hapus akun dokter"
               description="Apakah Anda yakin ingin menghapus akun dokter ini?"
-              onConfirm={confirm}
+              onConfirm={() => handleDelete(record.id)}
               onCancel={cancel}
               okText="Hapus"
               cancelText="Batal"
@@ -63,5 +78,11 @@ export const ListDoctorTable = () => {
     },
   ]
 
-  return <Table columns={columns} dataSource={doctorsListData} />
+  return (
+    <Table
+      columns={columns}
+      dataSource={doctorList}
+      rowKey={(record) => record.id}
+    />
+  )
 }
