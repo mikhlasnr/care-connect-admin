@@ -31,13 +31,10 @@ export const docterSlice = createSlice({
       })
       state.doctorList = newDoctorList
     },
-    removeDoctorList: (state, action: PayloadAction<DoctorItem>) => {
-      const newDoctorList = state.doctorList.filter((doctor) => {
-        if (doctor.id !== action.payload.id) {
-          return action.payload
-        }
-      })
-      state.doctorList = newDoctorList
+    removeDoctorList: (state, action: PayloadAction<{ doctorId: string }>) => {
+      state.doctorList = state.doctorList.filter(
+        (doctor) => doctor.id !== action.payload.doctorId,
+      )
     },
     setSelectedDoctor: (state, action: PayloadAction<DoctorItem>) => {
       state.selectedDoctor = action.payload
@@ -56,6 +53,8 @@ export const {
   setSelectedDoctor,
   removeSelectedDoctor,
   toggleShowDoctorForm,
+  removeDoctorList,
+  updateDoctorList
 } = docterSlice.actions
 
 export const docterReducer = docterSlice.reducer

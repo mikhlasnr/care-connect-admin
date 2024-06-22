@@ -1,18 +1,23 @@
 'use client'
 
+import {
+  removeDoctorList,
+  setSelectedDoctor,
+  toggleShowDoctorForm,
+} from '@/store/docter/docter.reducer'
 import { DoctorItem } from '@/store/docter/docter.types'
-import { useAppSelector } from '@/store/store'
+import { useAppDispatch, useAppSelector } from '@/store/store'
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons'
 import type { PopconfirmProps, TableProps } from 'antd'
 import { Button, Popconfirm, Space, Table, Tooltip, message } from 'antd'
-import Link from 'next/link'
 
 export const ListDoctorTable = () => {
+  const dispatch = useAppDispatch()
   const doctorList = useAppSelector((state) => state.docter.doctorList)
 
   // START HANDLE DELETE
-  const confirm: PopconfirmProps['onConfirm'] = (e) => {
-    console.log(e)
+  const handleDelete = (doctorId: string) => {
+    dispatch(removeDoctorList({ doctorId }))
     message.success('Data Berhasil Dihapus')
   }
 
@@ -20,6 +25,13 @@ export const ListDoctorTable = () => {
     console.log(e)
   }
   // END HANDLE DELETE
+
+  // START HANDLE UPDATE
+  const handleUpdate = (doctorItem: DoctorItem) => {
+    dispatch(setSelectedDoctor(doctorItem))
+    dispatch(toggleShowDoctorForm())
+  }
+  // END HANDLE UPDATE
 
   const columns: TableProps<DoctorItem>['columns'] = [
     {
@@ -44,13 +56,16 @@ export const ListDoctorTable = () => {
       render: (_, record) => (
         <Space size="middle">
           <Tooltip title="Ubah">
-            <Button icon={<EditOutlined />} />
+            <Button
+              icon={<EditOutlined />}
+              onClick={() => handleUpdate(record)}
+            />
           </Tooltip>
           <Tooltip title="Hapus">
             <Popconfirm
               title="Hapus akun dokter"
               description="Apakah Anda yakin ingin menghapus akun dokter ini?"
-              onConfirm={confirm}
+              onConfirm={() => handleDelete(record.id)}
               onCancel={cancel}
               okText="Hapus"
               cancelText="Batal"
@@ -63,5 +78,11 @@ export const ListDoctorTable = () => {
     },
   ]
 
-  return <Table columns={columns} dataSource={doctorList} />
+  return (
+    <Table
+      columns={columns}
+      dataSource={doctorList}
+      rowKey={(record) => record.id}
+    />
+  )
 }

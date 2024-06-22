@@ -7,7 +7,7 @@ export const doctorsListDataInit: DoctorItem[] = [
   {
     id: uuidv4(),
     name: 'Dr. Ahmad Fauzi',
-    date: dayjs('1990-01-01').format('dd-mm-yyyy'),
+    date: dayjs('2000-01-01').format('YYYY-MM-DD'),
     phone: '081234567890',
     nip: '19870012345678',
     gender: 'pria',
@@ -19,7 +19,7 @@ export const doctorsListDataInit: DoctorItem[] = [
   {
     id: uuidv4(),
     name: 'Dr. Siti Nurhaliza',
-    date: dayjs('1990-01-01').format('dd-mm-yyyy'),
+    date: dayjs('2000-01-01').format('YYYY-MM-DD'),
     phone: '082345678901',
     nip: '19930023456789',
     gender: 'wanita',
@@ -31,7 +31,7 @@ export const doctorsListDataInit: DoctorItem[] = [
   {
     id: uuidv4(),
     name: 'Dr. Budi Santoso',
-    date: dayjs('1990-01-01').format('dd-mm-yyyy'),
+    date: dayjs('2000-01-01').format('YYYY-MM-DD'),
     phone: '083456789012',
     nip: '19760034567890',
     gender: 'pria',
@@ -43,7 +43,7 @@ export const doctorsListDataInit: DoctorItem[] = [
   {
     id: uuidv4(),
     name: 'Dr. Dewi Anggraini',
-    date: dayjs('1990-01-01').format('dd-mm-yyyy'),
+    date: dayjs('2000-01-01').format('YYYY-MM-DD'),
     phone: '084567890123',
     nip: '19890045678901',
     gender: 'wanita',
@@ -55,7 +55,7 @@ export const doctorsListDataInit: DoctorItem[] = [
   {
     id: uuidv4(),
     name: 'Dr. Hendra Wijaya',
-    date: dayjs('1990-01-01').format('dd-mm-yyyy'),
+    date: dayjs('2000-01-01').format('YYYY-MM-DD'),
     phone: '085678901234',
     nip: '19710056789012',
     gender: 'pria',

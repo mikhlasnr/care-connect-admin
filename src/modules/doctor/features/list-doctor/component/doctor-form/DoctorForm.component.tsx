@@ -1,8 +1,10 @@
 import {
   addDoctorList,
+  removeSelectedDoctor,
   toggleShowDoctorForm,
+  updateDoctorList,
 } from '@/store/docter/docter.reducer'
-import { DoctorCreate } from '@/store/docter/docter.types'
+import { DoctorCreate, DoctorItem } from '@/store/docter/docter.types'
 import { useAppDispatch, useAppSelector } from '@/store/store'
 import {
   Button,
@@ -16,6 +18,7 @@ import {
   Select,
 } from 'antd'
 import dayjs from 'dayjs'
+import { useEffect } from 'react'
 const { Option } = Select
 
 type FieldType = {
@@ -39,16 +42,30 @@ export const DoctorForm = () => {
   )
 
   // START HANDLE MODAL
-  const handleOk = () => {
-    dispatch(toggleShowDoctorForm())
-    form.resetFields()
-  }
 
   const handleCancel = () => {
     dispatch(toggleShowDoctorForm())
+    dispatch(removeSelectedDoctor())
     form.resetFields()
   }
   // END HANDLE MODAL
+
+  // START HANDLE UPDATE DEFAULT VALUE
+  const selectedDoctor = useAppSelector((state) => state.docter.selectedDoctor)
+
+  useEffect(() => {
+    if (selectedDoctor) {
+      form.setFieldValue('name', selectedDoctor.name)
+      form.setFieldValue('date', dayjs(selectedDoctor.date))
+      form.setFieldValue('phone', selectedDoctor.phone)
+      form.setFieldValue('nip', selectedDoctor.nip)
+      form.setFieldValue('gender', selectedDoctor.gender)
+      form.setFieldValue('poliId', selectedDoctor.poliId)
+      form.setFieldValue('email', selectedDoctor.email)
+    }
+  }, [selectedDoctor])
+
+  // END HANDLE UPDATE DEFAULT VALUE
 
   // START HANDLE SUBMIT
   const onFinish: FormProps<DoctorCreate>['onFinish'] = (values) => {
@@ -56,13 +73,25 @@ export const DoctorForm = () => {
       (poliItem) => poliItem.id === values.poliId,
     )
     if (findSelectedPoli) {
-      const formattedValues: DoctorCreate = {
-        ...values,
-        poliName: findSelectedPoli.name,
-        date: dayjs(values.date).format('dd-mm-yyyy'), // Format date to string if needed
+      if (selectedDoctor) {
+        const formattedValues: DoctorItem = {
+          ...values,
+          id: selectedDoctor.id,
+          password: selectedDoctor.password,
+          poliName: findSelectedPoli.name,
+          date: dayjs(values.date).format('YYYY-MM-DD'), // Format date to string if needed
+        }
+        dispatch(updateDoctorList(formattedValues))
+        handleCancel()
+      } else {
+        const formattedValues: DoctorCreate = {
+          ...values,
+          poliName: findSelectedPoli.name,
+          date: dayjs(values.date).format('YYYY-MM-DD'), // Format date to string if needed
+        }
+        dispatch(addDoctorList(formattedValues))
+        handleCancel()
       }
-      dispatch(addDoctorList(formattedValues))
-      dispatch(toggleShowDoctorForm())
     }
   }
 
@@ -77,7 +106,6 @@ export const DoctorForm = () => {
     <Modal
       title="Tambah Dokter"
       open={isDoctorFormShow}
-      onOk={handleOk}
       onCancel={handleCancel}
       footer={null}
     >
