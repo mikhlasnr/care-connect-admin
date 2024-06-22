@@ -5,6 +5,7 @@ import { BaseContainer } from '@/shared/components/base-container/BaseContainer.
 import { Flex } from 'antd'
 
 export const ListDoctorView = () => {
+  
   return (
     <BaseContainer>
       <Flex vertical gap={24}>

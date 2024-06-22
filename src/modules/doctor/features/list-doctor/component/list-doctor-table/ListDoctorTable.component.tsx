@@ -1,14 +1,16 @@
 'use client'
 
-import React from 'react'
-import { Button, Popconfirm, Space, Table, Tag, Tooltip, message } from 'antd'
+import { DoctorItem } from '@/store/docter/docter.types'
+import { useAppSelector } from '@/store/store'
+import { DeleteOutlined, EditOutlined } from '@ant-design/icons'
 import type { PopconfirmProps, TableProps } from 'antd'
-import { DoctorProps } from './ListDoctorTable.type'
-import { doctorsListData } from './ListDoctorTable.utils'
-import { EditOutlined, DeleteOutlined } from '@ant-design/icons'
+import { Button, Popconfirm, Space, Table, Tooltip, message } from 'antd'
 import Link from 'next/link'
 
 export const ListDoctorTable = () => {
+  const doctorList = useAppSelector((state) => state.docter.doctorList)
+
+  // START HANDLE DELETE
   const confirm: PopconfirmProps['onConfirm'] = (e) => {
     console.log(e)
     message.success('Data Berhasil Dihapus')
@@ -17,25 +19,23 @@ export const ListDoctorTable = () => {
   const cancel: PopconfirmProps['onCancel'] = (e) => {
     console.log(e)
   }
+  // END HANDLE DELETE
 
-  const columns: TableProps<DoctorProps>['columns'] = [
+  const columns: TableProps<DoctorItem>['columns'] = [
     {
-      title: 'Name',
+      title: 'Nama',
       dataIndex: 'name',
       key: 'name',
-      render: (value, record) => (
-        <Link href={`doctor/${record.id}`}>{value}</Link>
-      ),
     },
     {
-      title: 'Age',
+      title: 'Umur',
       dataIndex: 'age',
       key: 'age',
     },
     {
       title: 'Poli',
-      dataIndex: 'categoryPoli',
-      key: 'categoryPoli',
+      dataIndex: 'poliName',
+      key: 'poliName',
     },
     {
       width: 80,
@@ -63,5 +63,5 @@ export const ListDoctorTable = () => {
     },
   ]
 
-  return <Table columns={columns} dataSource={doctorsListData} />
+  return <Table columns={columns} dataSource={doctorList} />
 }
